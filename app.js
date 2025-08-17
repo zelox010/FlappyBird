@@ -39,15 +39,15 @@ class SelfieFlappyGame {
         // Compliments array
         this.compliments = [
             "Damn, looking fine!",
-            "Iconic energy!",
-            "100% snack",
-            "Absolute legend!",
+            "Iconic energy, i see",
+            "100% snack, imma eat you tonight fr..",
+            "lookin pretty",
             "Main character vibes!",
-            "Pure magic!",
-            "Total knockout!",
-            "Certified stunner!",
-            "Big main character energy!",
-            "Absolutely gorgeous!"
+            "Pure magic, you fell from heaven or smth?",
+            "Total knockout",
+            "Certified stunner frfr",
+            "Shit... kinda blind now cause of your beauty ",
+            "Absolutely gorgeous"
         ];
         
         this.initializeElements();
