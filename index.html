@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selfie Flappy - Take a Selfie, Then Fly!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Landing Screen -->
+        <div id="landingScreen" class="screen active">
+            <div class="landing-content">
+                <div class="title-container">
+                    <h1 class="game-title">Take a selfie<br>— then see yourself fly!</h1>
+                    <div class="sparkles">
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                        <div class="sparkle"></div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button id="useCameraBtn" class="main-button primary">
+                        <span class="button-icon">📸</span>
+                        Use Camera
+                    </button>
+                    <button id="uploadPhotoBtn" class="main-button secondary">
+                        <span class="button-icon">🖼️</span>
+                        Upload Photo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Screen -->
+        <div id="cameraScreen" class="screen">
+            <div class="camera-container">
+                <video id="cameraVideo" autoplay playsinline muted></video>
+                <div class="camera-overlay">
+                    <div class="face-guide">
+                        <div class="guide-circle"></div>
+                        <p class="guide-text">Center your face in the circle</p>
+                    </div>
+                </div>
+                <div class="camera-controls">
+                    <button id="backFromCameraBtn" class="control-button back-button">← Back</button>
+                    <button id="captureBtn" class="capture-button">
+                        <div class="capture-inner"></div>
+                    </button>
+                    <button id="uploadInsteadBtn" class="control-button upload-instead">Upload Instead</button>
+                </div>
+            </div>
+            <canvas id="captureCanvas" style="display: none;"></canvas>
+        </div>
+
+        <!-- Upload Screen -->
+        <div id="uploadScreen" class="screen">
+            <div class="upload-container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <h3>Drag & Drop Your Photo</h3>
+                        <p>or click to browse</p>
+                        <div class="upload-preview" id="uploadPreview"></div>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="upload-controls">
+                    <button id="backFromUploadBtn" class="control-button back-button">← Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliment Screen -->
+        <div id="complimentScreen" class="screen">
+            <div class="compliment-container">
+                <div class="photo-showcase">
+                    <img id="userPhoto" alt="Your photo" class="user-photo">
+                    <div class="photo-sparkles">
+                        <div class="sparkle-particle"></div>
+                        <div class="sparkle-particle"></div>
+                        <div class="sparkle-particle"></div>
+                        <div class="sparkle-particle"></div>
+                        <div class="sparkle-particle"></div>
+                    </div>
+                </div>
+                <div class="compliment-bubble">
+                    <p id="complimentText" class="compliment-text"></p>
+                    <div class="bubble-tail"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-container">
+                <canvas id="gameCanvas"></canvas>
+                <div class="game-ui">
+                    <div class="score-display">
+                        <span id="currentScore" class="score-number">0</span>
+                    </div>
+                    <div class="best-score">
+                        Best: <span id="bestScore">0</span>
+                    </div>
+                    <div class="game-controls">
+                        <button id="pauseBtn" class="game-control-btn">⏸️</button>
+                        <button id="audioToggleBtn" class="game-control-btn">🔊</button>
+                    </div>
+                </div>
+                <div class="tap-hint">Tap to flap!</div>
+            </div>
+            
+            <!-- Pause Overlay -->
+            <div id="pauseOverlay" class="pause-overlay hidden">
+                <div class="pause-content">
+                    <h2>Game Paused</h2>
+                    <div class="pause-buttons">
+                        <button id="resumeBtn" class="main-button primary">Resume</button>
+                        <button id="quitBtn" class="main-button secondary">Quit Game</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen">
+            <div class="gameover-container">
+                <h2 class="gameover-title">Game Over!</h2>
+                <div class="score-summary">
+                    <div class="final-score">
+                        <span class="score-label">Score</span>
+                        <span id="finalScore" class="final-score-number">0</span>
+                    </div>
+                    <div class="best-score-display">
+                        <span class="best-label">Best</span>
+                        <span id="finalBestScore" class="best-score-number">0</span>
+                    </div>
+                </div>
+                <div class="gameover-buttons">
+                    <button id="tryAgainBtn" class="main-button primary">
+                        <span class="button-text">Try Again</span>
+                        <span class="button-hint">(R)</span>
+                    </button>
+                    <button id="newSelfieBtn" class="main-button secondary">New Selfie</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-toast hidden">
+            <p id="errorText"></p>
+            <button id="closeErrorBtn" class="close-error">×</button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p>Processing your photo...</p>
+        </div>
+
+        <!-- Accessibility Controls -->
+        <div class="accessibility-controls">
+            <button class="accessibility-btn" title="High Contrast Mode" onclick="document.body.classList.toggle('high-contrast')">🌓</button>
+            <button class="accessibility-btn" title="Large Font Mode" onclick="document.body.classList.toggle('large-font')">Aa</button>
+            <button class="accessibility-btn" title="Reduced Motion" onclick="document.body.classList.toggle('reduced-motion')">⚡</button>
+        </div>
+
+        <!-- Keyboard Instructions -->
+        <div class="keyboard-instructions">
+            <p><kbd>Space</kbd> to flap • <kbd>R</kbd> to restart • <kbd>M</kbd> to mute</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
